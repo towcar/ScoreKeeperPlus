@@ -1,11 +1,16 @@
 package com.carsonskjerdal.app.scorekeeperplus.GamePage;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.carsonskjerdal.app.scorekeeperplus.BaseClasses.BaseActivity;
 import com.carsonskjerdal.app.scorekeeperplus.R;
 
 import java.util.List;
@@ -16,27 +21,36 @@ import java.util.List;
  * Feel free to use code just give credit please :)
  */
 
-public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerHolder>  {
+public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerHolder> implements View.OnClickListener {
 
     private List<Players> playerList;
+    private Context mContext;
 
-    public PlayerAdapter(List<Players> list) {
+    PlayerAdapter(List<Players> list) {
         playerList = list;
+    }
 
+    @Override
+    public void onClick(View view) {
     }
 
 
     /* ViewHolder for each item */
-    public class PlayerHolder extends RecyclerView.ViewHolder  {
+    class PlayerHolder extends RecyclerView.ViewHolder  {
 
 
         TextView playerName;
+        TextView playerScore;
 
 
         PlayerHolder(View itemView) {
             super(itemView);
 
+            mContext = itemView.getContext();
+            playerName = itemView.findViewById(R.id.playerName);
+            playerScore = itemView.findViewById(R.id.playerScore);
         }
+
     }
 
     @Override
@@ -51,8 +65,21 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerHold
     public void onBindViewHolder(PlayerHolder holder, int position) {
         Players playerItem = playerList.get(position);
 
+
         //Sets Text
+
         holder.playerName.setText(playerItem.getName());
+
+        //set Highlighted if  selected
+        final int accentColor = getThemeAccentColor(mContext);
+        if (playerItem.getSelectState()){
+        holder.itemView.setBackgroundColor(accentColor);
+        } else {
+            holder.itemView.setBackgroundColor(Color.WHITE);
+        }
+
+        //set score
+        holder.playerScore.setText(String.valueOf(playerItem.getScore()));
 
     }
 
@@ -62,6 +89,13 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerHold
         return playerList.size();
     }
 
+    private static int getThemeAccentColor(Context context) {
+        int colorAttr;
+        colorAttr = android.R.attr.colorAccent;
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(colorAttr, outValue, true);
+        return outValue.data;
+    }
 
 }
 

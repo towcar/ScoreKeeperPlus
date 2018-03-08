@@ -10,17 +10,18 @@
 
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/playerName"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:hint="@string/player1"
         android:layout_weight="7"
-        android:textAlignment="textStart"
+        android:gravity="left|center"
+        android:text="@string/player1"
+
         android:textColor="#292929"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/score"
+        android:id="@+id/playerScore"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

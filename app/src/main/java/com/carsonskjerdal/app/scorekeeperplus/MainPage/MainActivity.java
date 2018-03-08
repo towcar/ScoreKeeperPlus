@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.carsonskjerdal.app.scorekeeperplus.BaseClasses.BaseActivity;
 import com.carsonskjerdal.app.scorekeeperplus.GamePage.GameActivity;
@@ -26,7 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+         {
+
+             NavigationView navigationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,17 +37,6 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
 
         final RecyclerView myRecycler = findViewById(R.id.recyclerPlayers);
 
@@ -61,15 +53,15 @@ public class MainActivity extends BaseActivity
         myRecycler.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
 
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         Button startButton = findViewById(R.id.buttonStart);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +73,22 @@ public class MainActivity extends BaseActivity
                 List<NewPlayers> updateList = myAdapter.getList();
                 Log.e("main","recieving "  + updateList.get(0).getName());
 
-                for(int i = 0; i < updateList.size(); i++) {
+               /* for(int i = 0; i < updateList.size(); i++) {
                     String player = updateList.get(i).getName();
                     //if (!player.isEmpty()) {
                         Log.e("main","sending " + updateList.get(i).getName());
                         listSend.add(player);
                 //}
+                }*/
+
+                //child count is length so minus one we can get all the items we need
+                for(int x = 0; x < myRecycler.getChildCount() - 1; x++) {
+                    //get the view to get the edit text
+                    View v = myRecycler.getLayoutManager().findViewByPosition(x);
+                    EditText myText = v.findViewById(R.id.name);
+                    String title = myText.getText().toString();
+                    listSend.add(title);
+                    Log.e("main","name is " + title);
                 }
 
                 Log.e("list send","list: " + listSend);
@@ -130,30 +132,7 @@ public class MainActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
 
 }

@@ -10,11 +10,13 @@ class Players {
 
     private String name;
     private int score;
+    private  boolean selected;
 
-    public Players(String name, int score){
+    public Players(String name, int score, boolean selected){
 
         this.name = name;
         this.score = score;
+        this.selected = selected;
 
     }
 
@@ -34,4 +36,10 @@ class Players {
         return score;
     }
 
+    public boolean getSelectState() {
+        return selected;
+    }
+    public void setSelectState(boolean selected) {
+        this.selected = selected;
+    }
 }
