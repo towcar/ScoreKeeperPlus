@@ -1,6 +1,6 @@
 package com.carsonskjerdal.app.scorekeeperplus.BaseClasses;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.carsonskjerdal.app.scorekeeperplus.AboutPage.AboutActivity;
 import com.carsonskjerdal.app.scorekeeperplus.R;
 
 /**
@@ -48,6 +49,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
 
         }
 

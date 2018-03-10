@@ -26,10 +26,9 @@ import com.carsonskjerdal.app.scorekeeperplus.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity
-         {
+public class MainActivity extends BaseActivity {
 
-             NavigationView navigationView;
+    NavigationView navigationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,12 +42,12 @@ public class MainActivity extends BaseActivity
         LinearLayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         myRecycler.setLayoutManager(llm);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(myRecycler.getContext(),llm.getOrientation());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(myRecycler.getContext(), llm.getOrientation());
         myRecycler.addItemDecoration(dividerItemDecoration);
         NewPlayers player = new NewPlayers("");
         final List<NewPlayers> list = new ArrayList<>();
         list.add(player);
-        //why was tihs set as final
+
         final NewPlayerAdapter myAdapter = new NewPlayerAdapter(list);
         myRecycler.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
@@ -71,7 +70,7 @@ public class MainActivity extends BaseActivity
 
                 ArrayList<String> listSend = new ArrayList<>();
                 List<NewPlayers> updateList = myAdapter.getList();
-                Log.e("main","recieving "  + updateList.get(0).getName());
+                Log.e("main", "recieving " + updateList.get(0).getName());
 
                /* for(int i = 0; i < updateList.size(); i++) {
                     String player = updateList.get(i).getName();
@@ -82,16 +81,16 @@ public class MainActivity extends BaseActivity
                 }*/
 
                 //child count is length so minus one we can get all the items we need
-                for(int x = 0; x < myRecycler.getChildCount() - 1; x++) {
+                for (int x = 0; x < myRecycler.getChildCount() - 1; x++) {
                     //get the view to get the edit text
                     View v = myRecycler.getLayoutManager().findViewByPosition(x);
                     EditText myText = v.findViewById(R.id.name);
                     String title = myText.getText().toString();
                     listSend.add(title);
-                    Log.e("main","name is " + title);
+                    Log.e("main", "name is " + title);
                 }
 
-                Log.e("list send","list: " + listSend);
+                Log.e("list send", "list: " + listSend);
                 intent.putStringArrayListExtra("playersList", listSend);
                 //pass in players list
                 startActivity(intent);
@@ -131,8 +130,6 @@ public class MainActivity extends BaseActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
 }
