@@ -1,6 +1,8 @@
 package com.carsonskjerdal.app.scorekeeperplus.BaseClasses;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -8,9 +10,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.carsonskjerdal.app.scorekeeperplus.AboutPage.AboutActivity;
+import com.carsonskjerdal.app.scorekeeperplus.GamePage.GameActivity;
+import com.carsonskjerdal.app.scorekeeperplus.MainPage.MainActivity;
 import com.carsonskjerdal.app.scorekeeperplus.R;
+import com.carsonskjerdal.app.scorekeeperplus.Tools.ToolsActivity;
+import com.facebook.CallbackManager;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 /**
  * Created by Carson on 2018-01-26.
@@ -22,10 +31,14 @@ import com.carsonskjerdal.app.scorekeeperplus.R;
 
 public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
     }
 
 
@@ -37,16 +50,31 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         if (id == R.id.nav_newgame) {
             // Start new game
+            Intent intent = new Intent(this, MainActivity.class);
+
+            //keeps player from returning to a screen before new game
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            //pass in players list
+            startActivity(intent);
             finish();
 
             Log.e("Base","new Game");
         } else if (id == R.id.nav_players) {
-
+            Toast.makeText(this, "Still working to add this feature!",
+                    Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_history) {
-
+            Toast.makeText(this, "Still working to add this feature!",
+                    Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_tools) {
+            Intent intent = new Intent(this, ToolsActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                    .build();
+            shareDialog.show(linkContent);
 
         } else if (id == R.id.nav_about) {
             Intent intent = new Intent(this, AboutActivity.class);
@@ -58,4 +86,23 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }
+/*
+//todo: List
+
+*/
+
+/*Advanced Ideas
+Design for rotation
+Allow for more players, Lock positions so bottom buttons don't fall off. (might make rotation easier)
+Finalize share to facebook
+Is History really a good feature?
+Look at saving players names (auto-suggestions)
+Perhaps a quick loading screen or first time use screen
+ */

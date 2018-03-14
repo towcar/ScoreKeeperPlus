@@ -14,6 +14,7 @@ import com.carsonskjerdal.app.scorekeeperplus.R;
 public class AboutActivity extends BaseActivity {
 
     NavigationView navigationView;
+    TextView text;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,12 @@ public class AboutActivity extends BaseActivity {
         toggle.syncState();
 
         //set the about text
-        TextView text = findViewById(R.id.textViewAbout);
+        text = findViewById(R.id.textViewAbout);
+        setTextDesc();
+
+    }
+
+    public void setTextDesc(){
         String string = "ScoreKeeper Plus is an easy to use score tracker application that allows users to get away from boring pen and paper."
                 + System.lineSeparator() +  System.lineSeparator() +  "We hope you enjoy keeping track of your games/score in a more modern approach. For help in development check " +
                 "us out on github or leave a review for improvements you want to see. We look forward to improving the quality of Score Keeper Plus."

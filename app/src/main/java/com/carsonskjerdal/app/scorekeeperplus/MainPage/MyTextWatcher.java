@@ -44,7 +44,8 @@ public class MyTextWatcher implements TextWatcher {
         //int size = (int) editText.getTag(R.string.listSize);
         //size is declared above
         if (name.length() == 1) {
-            if (position + 1 == size) {
+            //if editing last position and size isn't too big (for now)
+            if (position + 1 == size && size != 6) {
                 //add an item to the adapter list
                 size += 1;
                 listener.addPlayer();

@@ -32,6 +32,8 @@
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
+        android:background="@drawable/round_button"
+        android:textColor="#fafafa"
         android:text="@string/start_game" />
 
 </RelativeLayout>

@@ -1,7 +1,9 @@
 package com.carsonskjerdal.app.scorekeeperplus.MainPage;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
@@ -22,18 +24,23 @@ import android.widget.EditText;
 import com.carsonskjerdal.app.scorekeeperplus.BaseClasses.BaseActivity;
 import com.carsonskjerdal.app.scorekeeperplus.GamePage.GameActivity;
 import com.carsonskjerdal.app.scorekeeperplus.R;
+import com.carsonskjerdal.app.scorekeeperplus.SettingsPage.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends BaseActivity {
 
     NavigationView navigationView;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -90,10 +97,15 @@ public class MainActivity extends BaseActivity {
                     Log.e("main", "name is " + title);
                 }
 
+
                 Log.e("list send", "list: " + listSend);
                 intent.putStringArrayListExtra("playersList", listSend);
-                //pass in players list
+
+                //stops back button to return to add player screen
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -125,11 +137,34 @@ public class MainActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+   /* @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        // Save UI state changes to the savedInstanceState.
+
+
+
+
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore UI state from the savedInstanceState.
+
+    }*/
 
 
 }

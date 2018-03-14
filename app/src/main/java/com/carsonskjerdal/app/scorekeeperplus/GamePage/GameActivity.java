@@ -151,6 +151,7 @@ public class GameActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
             super.onBackPressed();
         }
     }
@@ -234,7 +235,6 @@ public class GameActivity extends BaseActivity
         context.getTheme().resolveAttribute(colorAttr, outValue, true);
         return outValue.data;
     }
-
 
 }
 //ToDo - insert game modes. (mini-golf, etc?)
