@@ -1,10 +1,13 @@
 package com.carsonskjerdal.app.scorekeeperplus.Tools;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,15 +15,18 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.carsonskjerdal.app.scorekeeperplus.BaseClasses.BaseActivity;
 import com.carsonskjerdal.app.scorekeeperplus.R;
+import com.carsonskjerdal.app.scorekeeperplus.SettingsPage.SettingsActivity;
+import com.skyfishjy.library.RippleBackground;
 
 import java.util.Random;
 
 public class ToolsActivity extends BaseActivity {
 
+    RippleBackground rippleBackground;
+    final Handler handler = new Handler();
     private ImageView bottle;
     private int lastAngle = -1;
     NavigationView navigationView;
@@ -42,14 +48,22 @@ public class ToolsActivity extends BaseActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        View main = findViewById(R.id.root);
+        rippleBackground = findViewById(R.id.root);
+        //View main = findViewById(R.id.root);
         bottle = findViewById(R.id.bottle);
 
-        main.setOnClickListener(new View.OnClickListener() {
+        rippleBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 spinTheBottle();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rippleBackground.stopRippleAnimation();
+                    }
+                }, 3000);
             }
+
         });
 
         Toast.makeText(this, "Touch To Spin", Toast.LENGTH_SHORT).show();
@@ -59,18 +73,19 @@ public class ToolsActivity extends BaseActivity {
 
     private void spinTheBottle() {
         Random r = new Random();
-        int angle = (r.nextInt(3600 - 360) + 360);
+        //angle = a random number of bounds, plus the mininum spin amount
+        int angle = (r.nextInt(3600 - 360) + 1800);
         float pivotX = bottle.getWidth() / 2;
         float pivotY = bottle.getHeight() / 2;
 
 
         final Animation animRotate = new RotateAnimation(lastAngle == -1 ? 0 : lastAngle, angle, pivotX, pivotY);
         lastAngle = angle;
-        animRotate.setDuration(2500);
+        animRotate.setDuration(4000);
         animRotate.setFillAfter(true);
-
+        //begin animations
+        rippleBackground.startRippleAnimation();
         bottle.startAnimation(animRotate);
-
     }
 
     private void resetTheBottle() {
@@ -83,6 +98,7 @@ public class ToolsActivity extends BaseActivity {
         animRotate.setFillAfter(true);
 
         bottle.startAnimation(animRotate);
+        //rippleBackground.stopRippleAnimation();
         Toast.makeText(this, "Resetting Bottle", Toast.LENGTH_SHORT).show();
     }
 
@@ -112,9 +128,10 @@ public class ToolsActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
-        } else
-        if (id == R.id.action_respin) {
+        } else if (id == R.id.action_respin) {
             resetTheBottle();
             return true;
 

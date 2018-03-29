@@ -22,7 +22,9 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.carsonskjerdal.app.scorekeeperplus.BaseClasses.BaseActivity;
+import com.carsonskjerdal.app.scorekeeperplus.MainPage.MainActivity;
 import com.carsonskjerdal.app.scorekeeperplus.R;
+import com.carsonskjerdal.app.scorekeeperplus.SettingsPage.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,12 +167,15 @@ public class GameActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(GameActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 

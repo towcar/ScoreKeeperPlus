@@ -33,6 +33,7 @@ import java.util.Objects;
 public class MainActivity extends BaseActivity {
 
     NavigationView navigationView;
+    NewPlayerAdapter myAdapter;
 
 
     @Override
@@ -47,17 +48,21 @@ public class MainActivity extends BaseActivity {
         final RecyclerView myRecycler = findViewById(R.id.recyclerPlayers);
 
         LinearLayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
         myRecycler.setLayoutManager(llm);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(myRecycler.getContext(), llm.getOrientation());
         myRecycler.addItemDecoration(dividerItemDecoration);
-        NewPlayers player = new NewPlayers("");
-        final List<NewPlayers> list = new ArrayList<>();
+        NewPlayers player = new NewPlayers("", 0);
+        List<NewPlayers> list = new ArrayList<>();
         list.add(player);
 
-        final NewPlayerAdapter myAdapter = new NewPlayerAdapter(list);
+        myAdapter = new NewPlayerAdapter(list);
+        myRecycler.scrollToPosition(myAdapter.getSize() - 1);
+
         myRecycler.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
+
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -79,30 +84,27 @@ public class MainActivity extends BaseActivity {
                 List<NewPlayers> updateList = myAdapter.getList();
                 Log.e("main", "recieving " + updateList.get(0).getName());
 
-               /* for(int i = 0; i < updateList.size(); i++) {
-                    String player = updateList.get(i).getName();
-                    //if (!player.isEmpty()) {
-                        Log.e("main","sending " + updateList.get(i).getName());
-                        listSend.add(player);
-                //}
-                }*/
-
                 //child count is length so minus one we can get all the items we need
-                for (int x = 0; x < myRecycler.getChildCount() - 1; x++) {
+                for (int x = 0; x < myRecycler.getAdapter().getItemCount() - 1; x++) {
+                    /*Log.e("main", "current count is " + x);
                     //get the view to get the edit text
+                    Log.e("main", "child count is " + myRecycler.getChildCount());
+
                     View v = myRecycler.getLayoutManager().findViewByPosition(x);
+                    Log.e("main", "current count is " + v);
+                    //pull out name from view
                     EditText myText = v.findViewById(R.id.name);
-                    String title = myText.getText().toString();
+                    String title = myText.getText().toString();*/
+                    //attempt to grab the title regardless of recycler view's child view showing
+                    NewPlayers player = updateList.get(x);
+                    String title = player.getName();
                     listSend.add(title);
                     Log.e("main", "name is " + title);
-                }
 
+                }
 
                 Log.e("list send", "list: " + listSend);
                 intent.putStringArrayListExtra("playersList", listSend);
-
-                //stops back button to return to add player screen
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(intent);
                 finish();

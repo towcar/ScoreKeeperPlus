@@ -12,4 +12,6 @@ interface AddPlayerInterface {
     void deletePlayer();
 
     int getSize();
+
+    void editPlayer(String name, int position);
 }

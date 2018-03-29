@@ -29,11 +29,12 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
 
     @Override
     public void addPlayer() {
-        NewPlayers players = new NewPlayers("");
-        //playerList.add(players);
+        //add player with blank name and position of size minus one (starts at zero)
+        NewPlayers players = new NewPlayers("", playerList.size() - 1 );
         playerList.add(players);
         notifyItemInserted(playerList.size());
-       // Log.e("Adapter", "size = " + playerList.size());
+
+       Log.e("Edit Text", "Player Added");
     }
 
     @Override
@@ -48,6 +49,15 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
         return playerList.size();
     }
 
+    @Override
+    public void editPlayer(String name, int position) {
+        //update player list based on position and passed in text
+        NewPlayers players = playerList.get(position);
+        players.setName(name);
+        //set the item with the position and the player passed through
+        playerList.set(position, players);
+    }
+
     /* ViewHolder for each item */
     public class PlayerHolder extends RecyclerView.ViewHolder  {
 
@@ -60,9 +70,14 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
            // Log.e("Holder","setview");
             playerName = itemView.findViewById(R.id.name);
             int listSize = playerList.size();
+
             //Log.e("Adapter", "size = " + playerList.size());
-            MyTextWatcher textWatcher = new MyTextWatcher(playerName, pInterface, listSize);
+            int position = getAdapterPosition();
+            Log.e("Adapter","id" + position);
+
+            MyTextWatcher textWatcher = new MyTextWatcher(playerName, pInterface, listSize, position);
             playerName.addTextChangedListener(textWatcher);
+            //need to maybe pass in a position or something to update list size
 
         }
     }
@@ -73,6 +88,10 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
                 .inflate(R.layout.new_player_item_layout, parent, false);
 
 
+        /*int height = parent.getMeasuredHeight() / 4;
+        int width = parent.getMeasuredWidth();
+
+        itemView.setLayoutParams(new RecyclerView.LayoutParams(width, height));*/
 
         return new PlayerHolder(itemView);
     }
@@ -95,7 +114,7 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
 
 
    public List<NewPlayers> getList(){
-        Log.e("getList","List: " + playerList.size() + " is the size. It cointains at position 0: " + playerList.get(0).getName() );
+        Log.e("Edit Text","List: " + playerList.size() + " is the size. It cointains at position 0: " + playerList.get(0).getName() );
         return playerList;
     }
 

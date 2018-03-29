@@ -18,6 +18,10 @@ import com.carsonskjerdal.app.scorekeeperplus.MainPage.MainActivity;
 import com.carsonskjerdal.app.scorekeeperplus.R;
 import com.carsonskjerdal.app.scorekeeperplus.Tools.ToolsActivity;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.Sharer.Result;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
@@ -28,8 +32,7 @@ import com.facebook.share.widget.ShareDialog;
  */
 
 
-
-public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     CallbackManager callbackManager;
     ShareDialog shareDialog;
@@ -59,7 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             startActivity(intent);
             finish();
 
-            Log.e("Base","new Game");
+            Log.e("Base", "new Game");
         } else if (id == R.id.nav_players) {
             Toast.makeText(this, "Still working to add this feature!",
                     Toast.LENGTH_LONG).show();
@@ -71,12 +74,36 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
+            //share post to facebook
+            final Context context = this;
+
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                    .setContentUrl(Uri.parse("http://www.carsonskjerdal.com"))
                     .build();
             shareDialog.show(linkContent);
 
-        } else if (id == R.id.nav_about) {
+            //call to see if post successful
+            shareDialog.registerCallback(callbackManager, new FacebookCallback<Result>() {
+                @Override
+                public void onSuccess(Result result) {
+                    // successful so call the share async task
+                    Toast.makeText(context, "Share Successful!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCancel() {
+                    Toast.makeText(context, "Share Cancelled!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    Toast.makeText(context, "Share Error!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } else if (id == R.id.nav_about)
+
+        {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
 
@@ -88,7 +115,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     }
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode,
+                                    final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }

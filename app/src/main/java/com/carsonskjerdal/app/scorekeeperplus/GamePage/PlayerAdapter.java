@@ -2,6 +2,7 @@ package com.carsonskjerdal.app.scorekeeperplus.GamePage;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -62,7 +63,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerHold
     }
 
     @Override
-    public void onBindViewHolder(PlayerHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PlayerHolder holder, int position) {
         Players playerItem = playerList.get(position);
 
 

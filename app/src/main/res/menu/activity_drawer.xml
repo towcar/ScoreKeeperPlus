@@ -24,12 +24,12 @@
             android:title="@string/tools" />
     </group>
 
-    <item android:title="Social">
+    <item android:title="@string/social">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="@string/share_app" />
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_menu_send"
