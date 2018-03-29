@@ -24,7 +24,7 @@ public class MyTextWatcher implements TextWatcher {
         this.editText = editText;
         this.listener = pInterface;
         this.size = listSize;
-        this.position = position;
+        this.position = this.position;
     }
 
 
@@ -42,42 +42,51 @@ public class MyTextWatcher implements TextWatcher {
     public void afterTextChanged(Editable s) {
 
         String name = s.toString();
-        int position = (int) editText.getTag();
-        size = listener.getSize();
 
-        //Log.e("watcher", "size" + size + ", name length " + name.length());
-        //int size = (int) editText.getTag(R.string.listSize);
-        //size is declared above
-        if (name.length() > 0) {
-            //if editing last position and size isn't too big (for now)
-            if (position + 1 == size) {
-                //add an item to the adapter list
-                size += 1;
-                listener.addPlayer();
-                Log.e("Edit Text", "Listener Player Added");
+        Log.e("Empty Text","Text is " + name);
+
+        if (editText.getTag() != null) {
+            int position = (int) editText.getTag();
+            size = listener.getSize();
+
+            //Log.e("watcher", "size" + size + ", name length " + name.length());
+            //int size = (int) editText.getTag(R.string.listSize);
+            //size is declared above
+            if (name.length() > 0) {
+                //if editing last position and size isn't too big (for now)
+                if (position + 1 == size) {
+                    //add an item to the adapter list
+                    size += 1;
+                    listener.addPlayer();
+                    listener.listListener();
+                    Log.e("Edit Text", "Listener Player Added");
+                }
+                if (position + 1 < size) { //update string name
+                    Log.e("Edit Text", "Listener Player Edited");
+                    listener.editPlayer(name, position);
+                }
+            } else {
+                //check if the current position is proven to be one away from the last spot
+                if (position + 2 == size) {
+                    //if last item is null then delete it
+                    listener.deletePlayer();
+                    listener.listListener();
+                    size -= 1;
+                } else {
+                    //In the situation of deleting a player higher up this will set it to be blank otherwise it won't update to ""
+                    listener.editPlayer(name, position);
+                }
+
+
+                //scenario of deleting something even lower on the list
+                if (position < size) {
+
+                }
+
+
             }
-            if (position + 1 < size){ //update string name
-                Log.e("Edit Text", "Listener Player Edited");
-                listener.editPlayer(name, position);
-            }
-        } else {
-            //check if the current position is proven to be one away from the last spot
-            if (position + 2 == size) {
-                //if last item is null then delete it
-                listener.deletePlayer();
-                size -= 1;
-            }
-
-
-            //scenario of deleting something even lower on the list
-            if (position < size) {
-
-            }
-
 
         }
-
-
 
     }
 }

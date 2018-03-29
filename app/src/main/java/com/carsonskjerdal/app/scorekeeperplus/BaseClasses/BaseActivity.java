@@ -128,7 +128,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
 /*Advanced Ideas
 Design for rotation
-Allow for more players, Lock positions so bottom buttons don't fall off. (might make rotation easier)
 Finalize share to facebook
 Is History really a good feature?
 Look at saving players names (auto-suggestions)

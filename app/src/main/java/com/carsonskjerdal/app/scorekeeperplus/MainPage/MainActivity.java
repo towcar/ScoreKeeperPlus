@@ -2,12 +2,15 @@ package com.carsonskjerdal.app.scorekeeperplus.MainPage;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.util.ListUpdateCallback;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -27,13 +31,16 @@ import com.carsonskjerdal.app.scorekeeperplus.R;
 import com.carsonskjerdal.app.scorekeeperplus.SettingsPage.SettingsActivity;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements AddPlayerInterface {
 
     NavigationView navigationView;
     NewPlayerAdapter myAdapter;
+    CustomRecycler customRecycler;
+    int position = 0;
 
 
     @Override
@@ -45,22 +52,47 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final RecyclerView myRecycler = findViewById(R.id.recyclerPlayers);
 
-        LinearLayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        customRecycler = findViewById(R.id.recyclerPlayers);
 
-        myRecycler.setLayoutManager(llm);
+        //custom LayoutManager for adjusting speed
+        VariableScrollSpeedLinearLayoutManager llm = new VariableScrollSpeedLinearLayoutManager(this, 50);
+        //llm.setStackFromEnd(true);
+        // myRecycler.setLayoutManager(llm);
+        customRecycler.setLayoutManager(llm);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(myRecycler.getContext(), llm.getOrientation());
-        myRecycler.addItemDecoration(dividerItemDecoration);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(customRecycler.getContext(), llm.getOrientation());
+        customRecycler.addItemDecoration(dividerItemDecoration);
         NewPlayers player = new NewPlayers("", 0);
         List<NewPlayers> list = new ArrayList<>();
         list.add(player);
 
-        myAdapter = new NewPlayerAdapter(list);
-        myRecycler.scrollToPosition(myAdapter.getSize() - 1);
+        //definetly not the solution
 
-        myRecycler.setAdapter(myAdapter);
+        myAdapter = new NewPlayerAdapter(list) {
+            @Override
+            public void listListener() {
+                Log.e("Main Activity","Scroll To Position");
+                position = myAdapter.getSize();
+                //customRecycler.smoothScrollToPosition(position - 1);
+
+                customRecycler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        customRecycler.smoothScrollToPosition(position - 1);
+                    }
+                });
+
+            }
+        };
+
+
+        //myAdapter.registerAdapterDataObserver(observer);
+
+        //myRecycler.scrollToPosition(myAdapter.getSize() - 1);
+
+        //myRecycler.setAdapter(myAdapter);
+        customRecycler.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
 
 
@@ -74,6 +106,9 @@ public class MainActivity extends BaseActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        customRecycler.scrollToPosition(myAdapter.getItemCount());
+
+
         Button startButton = findViewById(R.id.buttonStart);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,27 +120,21 @@ public class MainActivity extends BaseActivity {
                 Log.e("main", "recieving " + updateList.get(0).getName());
 
                 //child count is length so minus one we can get all the items we need
-                for (int x = 0; x < myRecycler.getAdapter().getItemCount() - 1; x++) {
-                    /*Log.e("main", "current count is " + x);
-                    //get the view to get the edit text
-                    Log.e("main", "child count is " + myRecycler.getChildCount());
-
-                    View v = myRecycler.getLayoutManager().findViewByPosition(x);
-                    Log.e("main", "current count is " + v);
-                    //pull out name from view
-                    EditText myText = v.findViewById(R.id.name);
-                    String title = myText.getText().toString();*/
-                    //attempt to grab the title regardless of recycler view's child view showing
+                for (int x = 0; x < customRecycler.getAdapter().getItemCount() - 1; x++) {
                     NewPlayers player = updateList.get(x);
                     String title = player.getName();
-                    listSend.add(title);
-                    Log.e("main", "name is " + title);
-
+                    //check to ensure title has a character
+                    if (!title.equals("")){
+                        listSend.add(title);
+                        Log.e("main", "name is " + title);
+                    }
                 }
 
                 Log.e("list send", "list: " + listSend);
+                //add list into intent
                 intent.putStringArrayListExtra("playersList", listSend);
 
+                //launch activity with the intent
                 startActivity(intent);
                 finish();
             }
@@ -146,6 +175,33 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void addPlayer() {
+
+    }
+
+    @Override
+    public void deletePlayer() {
+
+    }
+
+    @Override
+    public int getSize() {
+        return 0;
+    }
+
+    @Override
+    public void editPlayer(String name, int position) {
+
+    }
+
+    @Override
+    public void listListener() {
+
+    }
+
+
 
    /* @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {

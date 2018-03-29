@@ -1,5 +1,8 @@
 package com.carsonskjerdal.app.scorekeeperplus.MainPage;
 
+
+import android.database.DataSetObserver;
+
 /**
  * Created by Carson on 2018-01-30.
  * <p>
@@ -14,4 +17,6 @@ interface AddPlayerInterface {
     int getSize();
 
     void editPlayer(String name, int position);
+
+    void listListener();
 }

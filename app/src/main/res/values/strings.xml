@@ -41,7 +41,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_tools">Tools</string>
-    <string name="action_respin">Re-Spin</string>
+    <string name="action_respin">Reset Bottle</string>
     <string name="share_app">Share App</string>
     <string name="social">Social</string>
 

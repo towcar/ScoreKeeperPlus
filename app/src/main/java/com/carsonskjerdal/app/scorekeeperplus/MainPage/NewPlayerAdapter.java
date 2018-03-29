@@ -1,5 +1,7 @@
 package com.carsonskjerdal.app.scorekeeperplus.MainPage;
 
+import android.database.DataSetObserver;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,30 +19,39 @@ import java.util.List;
  * Feel free to use code just give credit please :)
  */
 
-public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.PlayerHolder> implements AddPlayerInterface {
+public abstract class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.PlayerHolder> implements AddPlayerInterface {
 
     private List<NewPlayers> playerList;
     private AddPlayerInterface pInterface = this;
 
-    public NewPlayerAdapter(List<NewPlayers> list) {
+
+    NewPlayerAdapter(List<NewPlayers> list) {
         playerList = list;
 
+    }
+
+    // Assign the listener implementing events interface that will receive the events
+    public void setCustomObjectListener(AddPlayerInterface listener) {
+        this.pInterface = listener;
     }
 
     @Override
     public void addPlayer() {
         //add player with blank name and position of size minus one (starts at zero)
-        NewPlayers players = new NewPlayers("", playerList.size() - 1 );
+        NewPlayers players = new NewPlayers("", playerList.size() - 1);
         playerList.add(players);
         notifyItemInserted(playerList.size());
-
-       Log.e("Edit Text", "Player Added");
+        //calls listener in main activity
+        pInterface.listListener();
+        Log.e("Edit Text", "Player Added at" + playerList.size());
     }
 
     @Override
-    public void deletePlayer(){
+    public void deletePlayer() {
         playerList.remove(playerList.size() - 1);
         notifyItemChanged(playerList.size());
+        //calls listener in main activity
+        pInterface.listListener();
         //Log.e("Adapter", "size = " + playerList.size());
     }
 
@@ -56,10 +67,15 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
         players.setName(name);
         //set the item with the position and the player passed through
         playerList.set(position, players);
+        //calls the custome recyclerview listener to update
+        //listener.listListener();
     }
 
+
+
+
     /* ViewHolder for each item */
-    public class PlayerHolder extends RecyclerView.ViewHolder  {
+    public class PlayerHolder extends RecyclerView.ViewHolder {
 
 
         EditText playerName;
@@ -67,13 +83,13 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
 
         PlayerHolder(View itemView) {
             super(itemView);
-           // Log.e("Holder","setview");
+            // Log.e("Holder","setview");
             playerName = itemView.findViewById(R.id.name);
             int listSize = playerList.size();
 
             //Log.e("Adapter", "size = " + playerList.size());
             int position = getAdapterPosition();
-            Log.e("Adapter","id" + position);
+            Log.e("Adapter", "id" + position);
 
             MyTextWatcher textWatcher = new MyTextWatcher(playerName, pInterface, listSize, position);
             playerName.addTextChangedListener(textWatcher);
@@ -97,13 +113,14 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
     }
 
     @Override
-    public void onBindViewHolder(PlayerHolder holder, int position) {
-        //Players playerItem = playerList.get(position);
+    public void onBindViewHolder(@NonNull PlayerHolder holder, int position) {
+        //holder.setIsRecyclable(false);
+        NewPlayers playerItem = playerList.get(position);
 
         //Sets Text
-        //holder.playerName.setText(playerItem.getName());
+        holder.playerName.setText(playerItem.getName());
         //holder.playerName.setTag(R.string.listSize, playerList.size());
-        holder.playerName.setTag( position);
+        holder.playerName.setTag(position);
     }
 
 
@@ -113,8 +130,8 @@ public class NewPlayerAdapter extends RecyclerView.Adapter<NewPlayerAdapter.Play
     }
 
 
-   public List<NewPlayers> getList(){
-        Log.e("Edit Text","List: " + playerList.size() + " is the size. It cointains at position 0: " + playerList.get(0).getName() );
+    public List<NewPlayers> getList() {
+        Log.e("Edit Text", "List: " + playerList.size() + " is the size. It cointains at position 0: " + playerList.get(0).getName());
         return playerList;
     }
 
