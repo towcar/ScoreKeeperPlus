@@ -208,6 +208,7 @@ public class GameActivity extends BaseActivity
 
     //loops through list to find out which item is selected
     public void updateScore(Boolean AreWeAddding){
+        int newScore = 0;
         // Code for button clicks
         for (int i = 0; i < list.size(); i++) {
 
@@ -216,7 +217,12 @@ public class GameActivity extends BaseActivity
             if (player.getSelectState()) {
                 //add to the items
                 int oldScore = player.getScore();
-                int newScore = Integer.parseInt(passPoints.getText().toString());
+                //check to make sure value isn't 0
+                if (passPoints.getText().toString().equals("")){
+                    newScore = 0;
+                } else {
+                    newScore = Integer.parseInt(passPoints.getText().toString());
+                }
 
                 //adds or subtracts according to button clicked
                 if(AreWeAddding){

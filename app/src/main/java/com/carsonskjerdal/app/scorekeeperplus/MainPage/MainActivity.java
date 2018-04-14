@@ -1,29 +1,18 @@
 package com.carsonskjerdal.app.scorekeeperplus.MainPage;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.util.ListUpdateCallback;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.carsonskjerdal.app.scorekeeperplus.BaseClasses.BaseActivity;
 import com.carsonskjerdal.app.scorekeeperplus.GamePage.GameActivity;
@@ -31,9 +20,7 @@ import com.carsonskjerdal.app.scorekeeperplus.R;
 import com.carsonskjerdal.app.scorekeeperplus.SettingsPage.SettingsActivity;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends BaseActivity implements AddPlayerInterface {
 
@@ -41,6 +28,8 @@ public class MainActivity extends BaseActivity implements AddPlayerInterface {
     NewPlayerAdapter myAdapter;
     CustomRecycler customRecycler;
     int position = 0;
+    //my signed key
+    //1st password
 
 
     @Override
@@ -85,11 +74,6 @@ public class MainActivity extends BaseActivity implements AddPlayerInterface {
 
             }
         };
-
-
-        //myAdapter.registerAdapterDataObserver(observer);
-
-        //myRecycler.scrollToPosition(myAdapter.getSize() - 1);
 
         //myRecycler.setAdapter(myAdapter);
         customRecycler.setAdapter(myAdapter);
@@ -200,29 +184,6 @@ public class MainActivity extends BaseActivity implements AddPlayerInterface {
     public void listListener() {
 
     }
-
-
-
-   /* @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-
-        // Save UI state changes to the savedInstanceState.
-
-
-
-
-
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-
-        super.onRestoreInstanceState(savedInstanceState);
-
-        // Restore UI state from the savedInstanceState.
-
-    }*/
 
 
 }

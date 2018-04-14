@@ -29,6 +29,9 @@ class Players {
     }
 
     public void setScore(int score) {
+        //set score max
+        if (score > 9999) {score = 9999;}
+        else if (score < -9999){score = -9999;}
         this.score = score;
     }
 
