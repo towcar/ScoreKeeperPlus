@@ -11,12 +11,46 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerPlayers"
-        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="40dp"
         android:layout_weight="2">
 
     </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonMinusOne"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/round_button_small"
+            android:textColor="#fafafa"
+            android:layout_weight="1"
+            android:text="+1" />
+
+        <Button
+            android:id="@+id/buttonSpacer"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/round_button_small"
+            android:layout_weight="100"
+            android:visibility="invisible"
+            android:textColor="#fafafa"
+            android:text="-1" />
+
+        <Button
+            android:id="@+id/buttonPlusOne"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/round_button_small"
+            android:layout_weight="1"
+            android:textColor="#fafafa"
+            android:text="-1" />
+    </LinearLayout>
 
 
     <LinearLayout

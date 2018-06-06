@@ -1,5 +1,6 @@
 package com.carsonskjerdal.app.scorekeeperplus.GamePage;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,8 +38,11 @@ public class GameActivity extends BaseActivity
     RecyclerView myRecycler;
     NavigationView navigationView;
     EditText passPoints;
+    SeekBar seekBar;
     Button addButton;
     Button subtractButton;
+    Button plusOneButton;
+    Button subtractOneButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,10 @@ public class GameActivity extends BaseActivity
         addButton.setOnClickListener(this);
         subtractButton = findViewById(R.id.button2);
         subtractButton.setOnClickListener(this);
-
+        plusOneButton = findViewById(R.id.buttonPlusOne);
+        plusOneButton.setOnClickListener(this);
+        subtractOneButton = findViewById(R.id.buttonMinusOne);
+        subtractOneButton.setOnClickListener(this);
 
 
         Intent intent = getIntent();
@@ -93,7 +100,7 @@ public class GameActivity extends BaseActivity
         passPoints = findViewById(R.id.editText);
 
         //set up seek bar listener
-        SeekBar seekBar = findViewById(R.id.seekBar);
+        seekBar = findViewById(R.id.seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -120,26 +127,26 @@ public class GameActivity extends BaseActivity
 
                     @Override
                     public void onItemClick(View view, int position) {
-                    Log.e("Game Activity"," Click detected");
-                    if (view.isSelected()){
-                        view.setBackgroundColor(Color.WHITE);
-                        view.setSelected(false);
-                        Players playerEdit = list.get(position);
-                        playerEdit.setSelectState(false);
-                    } else {
-                        view.setBackgroundColor(accentColor);
-                        view.setSelected(true);
-                        Players playerEdit = list.get(position);
-                        playerEdit.setSelectState(true);
-                    }
+                        Log.e("Game Activity", " Click detected");
+                        if (view.isSelected()) {
+                            view.setBackgroundColor(Color.WHITE);
+                            view.setSelected(false);
+                            Players playerEdit = list.get(position);
+                            playerEdit.setSelectState(false);
+                        } else {
+                            view.setBackgroundColor(accentColor);
+                            view.setSelected(true);
+                            Players playerEdit = list.get(position);
+                            playerEdit.setSelectState(true);
+                        }
 
-                    //Loop and set the selected one? Maybe leave it so multiple are selected
+                        //Loop and set the selected one? Maybe leave it so multiple are selected
 
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                    //add functions here
+                        //add functions here
                     }
                 })
         );
@@ -201,13 +208,54 @@ public class GameActivity extends BaseActivity
                 //subtract button
                 updateScore(false);
                 break;
+            case R.id.buttonPlusOne:
+                //add button
+                scoreAdjust(true);
 
+                break;
+
+            case R.id.buttonMinusOne:
+                //subtract button
+                scoreAdjust(false);
+                break;
 
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private void scoreAdjust(boolean AreWeAdding) {
+
+
+        // get the string from edit text
+        String score = passPoints.getText().toString();
+        Integer newScore;
+        //ensure its not null
+        if (score.equals("")) {
+            newScore = 0;
+        } else {
+            newScore = Integer.parseInt(score);
+        }
+
+        //depending on boolean adjust set to plus one or minus one
+        if (AreWeAdding) {
+            newScore -= 1;
+            passPoints.setText(Integer.toString(newScore));
+
+        } else {
+            newScore += 1;
+            passPoints.setText(Integer.toString(newScore));
+        }
+        //update progress bar
+
+        seekBar.setMax(0);
+        seekBar.setMax(100);
+        seekBar.setProgress(newScore);
+        seekBar.refreshDrawableState();
+
+    }
+
     //loops through list to find out which item is selected
-    public void updateScore(Boolean AreWeAddding){
+    public void updateScore(Boolean AreWeAddding) {
         int newScore = 0;
         // Code for button clicks
         for (int i = 0; i < list.size(); i++) {
@@ -218,14 +266,14 @@ public class GameActivity extends BaseActivity
                 //add to the items
                 int oldScore = player.getScore();
                 //check to make sure value isn't 0
-                if (passPoints.getText().toString().equals("")){
+                if (passPoints.getText().toString().equals("")) {
                     newScore = 0;
                 } else {
                     newScore = Integer.parseInt(passPoints.getText().toString());
                 }
 
                 //adds or subtracts according to button clicked
-                if(AreWeAddding){
+                if (AreWeAddding) {
                     player.setScore(oldScore + newScore);
                 } else {
                     player.setScore(oldScore - newScore);
